@@ -1,4 +1,12 @@
-import { Package } from '../types';
+import { Package, Tag } from '../types';
+
+export const defaultTags: Tag[] = [
+  { id: 'tag-1', name: '贵重物品', color: '#f59e0b' },
+  { id: 'tag-2', name: '生鲜冷链', color: '#06b6d4' },
+  { id: 'tag-3', name: '易碎品', color: '#ec4899' },
+  { id: 'tag-4', name: '加急件', color: '#ef4444' },
+  { id: 'tag-5', name: '大件', color: '#8b5cf6' },
+];
 
 const cities = [
   { name: '北京', x: 70, y: 20 },
@@ -41,6 +49,7 @@ function generateRoute(from: { x: number; y: number }, to: { x: number; y: numbe
 export function generatePackages(count: number): Package[] {
   const packages: Package[] = [];
   const statuses: Array<'transit' | 'delivered' | 'exception'> = ['transit', 'transit', 'transit', 'delivered', 'exception'];
+  const tagIdPool = defaultTags.map(t => t.id);
 
   for (let i = 0; i < count; i++) {
     const fromCity = cities[Math.floor(Math.random() * cities.length)];
@@ -55,6 +64,13 @@ export function generatePackages(count: number): Package[] {
     const currentIndex = Math.min(Math.floor((progress / 100) * (route.length - 1)), route.length - 1);
     const pos = route[currentIndex];
 
+    const tagIds: string[] = [];
+    if (Math.random() > 0.5) {
+      const numTags = Math.floor(Math.random() * 2) + 1;
+      const shuffled = [...tagIdPool].sort(() => Math.random() - 0.5);
+      tagIds.push(...shuffled.slice(0, numTags));
+    }
+
     packages.push({
       id: `PKG${String(i + 1).padStart(4, '0')}`,
       trackingNo: `SF${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
@@ -68,6 +84,7 @@ export function generatePackages(count: number): Package[] {
       x: pos.x,
       y: pos.y,
       route,
+      tagIds,
     });
   }
 
