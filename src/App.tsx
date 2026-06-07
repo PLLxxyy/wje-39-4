@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Package, FilterStatus, FilterTag } from './types';
 import { usePackages } from './hooks/usePackages';
 import StatsBar from './components/StatsBar';
@@ -11,6 +11,15 @@ function App() {
   const [filter, setFilter] = useState<FilterStatus>('all');
   const [tagFilter, setTagFilter] = useState<FilterTag>('all');
   const [selected, setSelected] = useState<Package | null>(null);
+
+  useEffect(() => {
+    if (selected) {
+      const updated = packages.find((p) => p.id === selected.id);
+      if (updated) {
+        setSelected(updated);
+      }
+    }
+  }, [packages]);
 
   const handleSelect = (pkg: Package) => {
     const updated = packages.find((p) => p.id === pkg.id);

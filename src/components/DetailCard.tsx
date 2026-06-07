@@ -59,14 +59,14 @@ export default function DetailCard({ pkg, tags, onClose, onToggleTag }: Props) {
                   key={tag.id}
                   onClick={() => onToggleTag(pkg.id, tag.id)}
                   className={`text-[10px] px-2 py-1 rounded-full flex items-center gap-1 transition-all ${
-                    isActive
-                      ? 'ring-1 ring-offset-1 ring-offset-slate-800'
-                      : 'opacity-60 hover:opacity-100'
+                    isActive ? '' : 'opacity-60 hover:opacity-100'
                   }`}
                   style={{
                     backgroundColor: isActive ? `${tag.color}30` : `${tag.color}15`,
                     color: tag.color,
-                    ringColor: tag.color,
+                    boxShadow: isActive
+                      ? `0 0 0 1px ${tag.color}, 0 0 0 3px #1e293b`
+                      : 'none',
                   }}
                 >
                   <span
